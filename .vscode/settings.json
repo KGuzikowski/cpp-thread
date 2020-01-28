@@ -9,6 +9,7 @@
         "thread": "cpp",
         "chrono": "cpp",
         "iosfwd": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "array": "cpp"
     }
 }
