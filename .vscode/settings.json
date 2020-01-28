@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "mutex": "cpp",
+        "fstream": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "thread": "cpp"
+    }
+}
