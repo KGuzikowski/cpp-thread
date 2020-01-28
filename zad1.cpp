@@ -21,22 +21,13 @@ public:
     Judge(){}
 };
 
-class Person{
-public:
-    string id;
-    Person(string ID) {
-        id = ID;
-    }
-    virtual void Action() {}
-};
-
 class Reader {
 public:
     string id;
     Reader(string ID) {
         id = ID;
     }
-    void Action(fstream file, shared_mutex decision) {
+    void Action(fstream &file, shared_mutex &decision) {
         string line;
 
         shared_lock<shared_mutex> lock(decision);
@@ -55,23 +46,18 @@ public:
     Writer(string ID) {
         id = ID;
     }
-    static void Action(Writer &w, fstream file, shared_mutex decision) {
+    void Action(fstream &file, shared_mutex &decision) {
         int number = rand() % 1000 + 1;
 
         lock_guard<shared_mutex> lock(decision);
         this_thread::sleep_for(chrono::seconds(getSeconds()));
-        file << w.id + to_string(number) << endl;
+        file << id + to_string(number) << endl;
     }
 };
-
-// void call_f(Person p, fstream file, shared_mutex decision) {
-//     p.Action(file, decision);
-// }
 
 int main()
 {
     srand(time(NULL));
-
     int num = 5;
 
     vector<thread> threads;
@@ -90,16 +76,14 @@ int main()
         }
         
         for (int i = 0; i < num; i++){
-            // threads[i] = thread(call_f, writers[i], file, judge.decision);
-            // threads[i] = thread(call_f, readers[i], file, judge.decision);
-            threads[i] = thread(Writer::Action, writers[i], file, judge.decision);
-            // threads[i + num] = thread(readers[i].Action, file, judge.decision);
+            threads[i] = thread(&Writer::Action, &writers[i], ref(file), ref(judge.decision));
+            threads[i + num] = thread(&Reader::Action, &readers[i], ref(file), ref(judge.decision));
         }
 
-        file.close();
         for(int i = 0; i < num * 2; i++) {
             threads[i].join();
         }
+        file.close();
     } else {
         cout << "Couldn't open file: dane.txt!" << endl;
     }

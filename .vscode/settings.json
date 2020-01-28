@@ -6,6 +6,9 @@
         "string": "cpp",
         "istream": "cpp",
         "ostream": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "chrono": "cpp",
+        "iosfwd": "cpp",
+        "shared_mutex": "cpp"
     }
 }
